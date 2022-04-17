@@ -33,10 +33,7 @@ class MABadge(bt.Strategy):
 
     def notify_order(self, order):
         if order.status in [order.Submitted, order.Accepted]:
-            #主动买卖的订单提交或接受时  - 不触发
             return
-        #验证订单是否完成
-        #注意: 当现金不足时，券商可以拒绝订单
         if order.status in [order.Completed]:
             if order.isbuy():
                 self.log(
@@ -54,7 +51,6 @@ class MABadge(bt.Strategy):
                 'Order Canceled/Margin/Rejected p:{:.2f}, s: {:.2f}, t: {:.2f}, c:{:.2f} '
                 .format(order.price, order.size, order.price * order.size,
                         self.broker.get_cash()))
-        #重置订单
         self.order = None
 
     def next(self):
@@ -107,8 +103,3 @@ if __name__ == '__main__':
     # run backtest
     cerebro.run()
     print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
-
-    # # plot diagram
-    # plt.figure()
-    # cerebro.plot()
-    # plt.show()
